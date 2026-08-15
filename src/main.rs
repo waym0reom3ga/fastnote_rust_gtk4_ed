@@ -15,7 +15,20 @@ fn main() {
         return;
     }
     
+    let mut event_file = None;
+    let mut i = 1;
+    while i < args.len() {
+        if args[i] == "--event-file" && i + 1 < args.len() {
+            event_file = Some(args[i + 1].clone());
+            i += 2;
+        } else {
+            eprintln!("fastnote-rust-gtk4: unknown option: {}", args[i]);
+            std::process::exit(2);
+        }
+    }
+    
     let mut app = app::FastNoteApp::new();
-    let status = app.run(&args);
+    app.event_file = event_file;
+    let status = app.run();
     std::process::exit(status);
 }
